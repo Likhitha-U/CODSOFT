@@ -1,63 +1,245 @@
 import java.util.Scanner;
-class Main
-{
-    public static void main(String args[])
-    {
-        Scanner sc=new Scanner(System.in);
-        System.out.print("Enter Student Name:");
-        String name=sc.nextLine();
-        System.out.print("Enter number of subjects:");
-        int n=sc.nextInt();
-        int sum=0;
-        int total=n*100;
-        String grade="";
-        boolean fail=false;
-        int m[]=new int[n];
-        for(int i=0;i<n;i++)
-        {
-              System.out.print("Enter marks for subject "+(i+1)+"(out of 100):");
-              int marks=sc.nextInt();
-              if(marks<0||marks>100)
-              {
-                System.out.println("Invaild Marks!Please Enter valid marks(0-100)");
-                i--;
-                continue;
-              }
-              if(marks<40)
-              {
-                 fail=true;
-                 grade="F";
-              }
-              m[i]=marks;
-              sum=sum+marks;
-        }
-        double avg=(sum*100.0/total);
-        if(!fail)
-        {
-            if(avg>=90.0)
-               grade="S";
-            else if(avg<90&&avg>=80)
-               grade="A";
-            else if(avg<80&&avg>=70)
-               grade="B";
-            else if(avg<70&&avg>=60)
-               grade="C" ;
-            else if(avg<60&&avg>=50)
-               grade="D";
-            else if(avg<50&&avg>=40)
-               grade="E";
-            else
-               grade="F";
-        }
-        System.out.println("Student Name: "+name);
-        System.out.println("Total Subjects: "+n);
-        for(int i=0;i<n;i++)
-        {
-            System.out.println("Subject "+(i+1)+" Marks: "+m[i]);
-        }
-        System.out.println("Total Marks: "+sum);
-        System.out.printf("Average Percentage: %.2f%%%n",avg);
-        System.out.println("Grade: "+grade);
 
+public class Main {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        StudentManager manager =
+                new StudentManager();
+
+        while (true) {
+
+            System.out.println(
+                    "\n===== MENU ====="
+            );
+
+            System.out.println(
+                    "1. Add Student"
+            );
+
+            System.out.println(
+                    "2. View Students"
+            );
+
+            System.out.println(
+                    "3. Search Student"
+            );
+
+            System.out.println(
+                    "4. Update Student Name"
+            );
+
+            System.out.println(
+                    "5. Delete Student"
+            );
+
+            System.out.println(
+                    "6. Show Topper"
+            );
+
+            System.out.println(
+                    "7. Exit"
+            );
+
+            System.out.print(
+                    "Enter Choice : "
+            );
+
+            int choice =
+                    sc.nextInt();
+
+            switch (choice) {
+
+                case 1:
+
+                    System.out.print(
+                            "Enter ID : "
+                    );
+
+                    int id =
+                            sc.nextInt();
+
+                    sc.nextLine();
+
+                    System.out.print(
+                            "Enter Name : "
+                    );
+
+                    String name =
+                            sc.nextLine();
+
+                    System.out.print(
+                            "Enter Number of Subjects : "
+                    );
+
+                    int n =
+                            sc.nextInt();
+
+                    int[] marks =
+                            new int[n];
+
+                    for (int i = 0; i < n; i++) {
+
+                        while (true) {
+
+                            System.out.print(
+                                    "Marks Subject "
+                                            + (i + 1)
+                                            + " : "
+                            );
+
+                            int mark =
+                                    sc.nextInt();
+
+                            if (mark >= 0 &&
+                                    mark <= 100) {
+
+                                marks[i] = mark;
+                                break;
+                            }
+
+                            System.out.println(
+                                    "Invalid Marks!"
+                            );
+                        }
+                    }
+
+                    Student student =
+                            new Student(
+                                    id,
+                                    name,
+                                    marks
+                            );
+
+                    manager.addStudent(
+                            student
+                    );
+
+                    break;
+
+                case 2:
+
+                    manager.displayStudents();
+
+                    break;
+
+                case 3:
+
+                    System.out.print(
+                            "Enter ID : "
+                    );
+
+                    int searchId =
+                            sc.nextInt();
+
+                    Student found =
+                            manager.searchStudent(
+                                    searchId
+                            );
+
+                    if (found != null) {
+
+                        System.out.println(
+                                "Student Found"
+                        );
+
+                        System.out.println(
+                                "Name : "
+                                        + found.getName()
+                        );
+                    } else {
+
+                        System.out.println(
+                                "Student Not Found"
+                        );
+                    }
+
+                    break;
+
+                case 4:
+
+                    System.out.print(
+                            "Enter ID : "
+                    );
+
+                    int updateId =
+                            sc.nextInt();
+
+                    sc.nextLine();
+
+                    System.out.print(
+                            "Enter New Name : "
+                    );
+
+                    String newName =
+                            sc.nextLine();
+
+                    if (manager.updateStudentName(
+                            updateId,
+                            newName
+                    )) {
+
+                        System.out.println(
+                                "Updated Successfully"
+                        );
+
+                    } else {
+
+                        System.out.println(
+                                "Student Not Found"
+                        );
+                    }
+
+                    break;
+
+                case 5:
+
+                    System.out.print(
+                            "Enter ID : "
+                    );
+
+                    int deleteId =
+                            sc.nextInt();
+
+                    if (manager.deleteStudent(
+                            deleteId
+                    )) {
+
+                        System.out.println(
+                                "Deleted Successfully"
+                        );
+
+                    } else {
+
+                        System.out.println(
+                                "Student Not Found"
+                        );
+                    }
+
+                    break;
+
+                case 6:
+
+                    manager.showTopper();
+
+                    break;
+
+                case 7:
+
+                    System.out.println(
+                            "Exiting..."
+                    );
+
+                    System.exit(0);
+
+                default:
+
+                    System.out.println(
+                            "Invalid Choice"
+                    );
+            }
+        }
     }
 }
